@@ -1,4 +1,4 @@
-package it.cbnoc.manning;
+package it.cbnoc.manning.function;
 
 import java.util.function.Supplier;
 

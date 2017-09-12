@@ -1,6 +1,8 @@
 package it.cbnoc.test;
 
-import it.cbnoc.manning.Function;
+import it.cbnoc.manning.function.Function;
+
+import static it.cbnoc.manning.function.Case.mcase;
 
 public class MAAAIN {
 
@@ -68,5 +70,8 @@ public class MAAAIN {
     <A, B, C, D> String func(A a, B b, C c, D d) {
         return String.format("%s, %s, %s, %s", a, b, c, d);
     }
+
+
+
 
 }

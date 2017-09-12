@@ -1,4 +1,4 @@
-package it.cbnoc.manning;
+package it.cbnoc.manning.function;
 
 public interface Function<T, U> {
 
