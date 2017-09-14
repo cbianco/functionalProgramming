@@ -1,6 +1,7 @@
 package it.cbnoc.test;
 
 import it.cbnoc.manning.function.Function;
+import it.cbnoc.manning.function.TailCall;
 
 import static it.cbnoc.manning.function.Case.mcase;
 
@@ -50,7 +51,7 @@ public class MAAAIN {
     }
 
     public static final Function<Integer, Integer> factorial =
-            n -> n <= 1 ? n : n * MAAAIN.factorial.apply(n - 1);;
+            n -> n <= 1 ? n : n * MAAAIN.factorial.apply(n - 1);
 
     public static void functionRecursive(String[] args) {
 
@@ -69,6 +70,27 @@ public class MAAAIN {
 
     <A, B, C, D> String func(A a, B b, C c, D d) {
         return String.format("%s, %s, %s, %s", a, b, c, d);
+    }
+
+    public static void main(String[] args) {
+
+
+        //System.out.println(add(Integer.MAX_VALUE, 5).eval());
+
+        System.out.println(addr(Integer.MAX_VALUE, 1));
+
+    }
+
+    public static TailCall<Integer> add(int a, int b){
+
+        return a == 0? TailCall.ret(b):TailCall.sus(() -> add(a - 1, b + 1));
+
+    }
+
+    public static int addr(int a, int b){
+
+        return a == 0? b : addr(a - 1 , b + 1);
+
     }
 
 

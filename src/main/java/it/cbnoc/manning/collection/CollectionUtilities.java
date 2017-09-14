@@ -56,6 +56,10 @@ public class CollectionUtilities {
 		return Collections.unmodifiableList(ts);
 	}
 
+	public static <T> List<T> prepend(T t, List<T> list) {
+		return foldLeft(list, list(t), a -> b -> append(a, b));
+	}
+
 	public static <T, U> U foldLeft(
 		List<T> list, U acc, Function<U, Function<T, U>> function) {
 
@@ -87,4 +91,39 @@ public class CollectionUtilities {
 		return Collections.unmodifiableList(result);
 	}
 
+	public static <T> List<T> reverse2(List<T> list) {
+
+		return foldLeft(list, list(), a -> b -> prepend(b, a));
+	}
+
+	public static <T, U> List<U> map(List<T> list, Function<T, U> f) {
+		List<U> newList = new ArrayList<>();
+		for (T value : list) {
+			newList.add(f.apply(value));
+		}
+		return newList;
+	}
+
+	public static <T, U> List<U> mapLeft(List<T> list, Function<T, U> f) {
+		return foldLeft(list, list(), a -> b -> append(a, f.apply(b)));
+	}
+
+	public static <T, U> List<U> mapRight(List<T> list, Function<T, U> f) {
+		return foldRight(list, list(), a -> b -> prepend(f.apply(a), b));
+	}
+
+	public static <T> List<T> unfold(
+		T seed, Function<T, T> f, Function<T, Boolean> p) {
+
+		List<T> result = new ArrayList<>();
+
+		T temp = seed;
+
+		while (p.apply(temp)) {
+			result = append(result, temp);
+			temp = f.apply(temp);
+		}
+
+		return result;
+	}
 }

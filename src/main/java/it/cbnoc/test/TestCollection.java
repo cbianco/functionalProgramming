@@ -23,6 +23,15 @@ public class TestCollection {
 		Function<Integer, Function<String, String>> f2 = x -> y -> addIS(x, y);
 
 		System.out.println(foldRight(list, identity, f2));
+
+		System.out.println("prepend: " + prepend(5, list));
+
+		System.out.println("reverse2: " + reverse2(list));
+
+		System.out.println("map : " + mapLeft(list, a -> "ciao : " + a ));
+
+		System.out.println("map : " + mapRight(list, a -> "ciao : " + a ));
+
 	}
 
 	private static String addIS(Integer i, String s) {
