@@ -6,6 +6,7 @@ import java.util.List;
 import static it.cbnoc.utils.CollectionUtilities.*;
 
 import it.cbnoc.function.Function;
+import it.cbnoc.utils.Memoizer;
 import it.cbnoc.utils.TailCall;
 
 import static it.cbnoc.utils.TailCall.*;
@@ -24,6 +25,8 @@ public class TestRecursion {
         return new AddHelper().addHelper.apply(x).apply(y).eval();
     };
 
+    static Function<Integer, BigInteger> function = Memoizer.memoize(TestRecursion::fib);
+
     public static void main(String[] args) {
       //  System.out.println(addRec(0, 100000));
       //System.out.println(sum(range(1,10000)).eval());
@@ -32,9 +35,15 @@ public class TestRecursion {
         for(int i = 0; i <= n; i++) {
             System.out.print(fib(i) + " ");
         }*/
+        long ms = System.currentTimeMillis();
+        function.apply(1000000);
+        long ms1 = System.currentTimeMillis() - ms;
+        ms = System.currentTimeMillis();
+        function.apply(1000000);
+        long ms2 = System.currentTimeMillis() - ms;
 
-        System.out.println(fibr(1000));
-
+        System.out.println(ms1);
+        System.out.println(ms2);
     }
 
     public static BigInteger fib(int x) {
