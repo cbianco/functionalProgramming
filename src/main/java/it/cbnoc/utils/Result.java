@@ -1,4 +1,6 @@
-package it.cbnoc.manning.function;
+package it.cbnoc.utils;
+
+import it.cbnoc.function.Effect;
 
 public abstract class Result<T> {
 

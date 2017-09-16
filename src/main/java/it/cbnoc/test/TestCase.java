@@ -1,15 +1,15 @@
 package it.cbnoc.test;
 
-import it.cbnoc.manning.function.Effect;
-import it.cbnoc.manning.function.Function;
-import it.cbnoc.manning.function.Result;
+import it.cbnoc.function.Effect;
+import it.cbnoc.function.Function;
+import it.cbnoc.utils.Result;
 
 import java.util.regex.Pattern;
 
-import static it.cbnoc.manning.function.Case.match;
-import static it.cbnoc.manning.function.Case.mcase;
-import static it.cbnoc.manning.function.Result.failure;
-import static it.cbnoc.manning.function.Result.success;
+import static it.cbnoc.utils.Case.match;
+import static it.cbnoc.utils.Case.mcase;
+import static it.cbnoc.utils.Result.failure;
+import static it.cbnoc.utils.Result.success;
 
 public class TestCase {
 

@@ -1,6 +1,9 @@
-package it.cbnoc.manning.function;
+package it.cbnoc.utils;
 
-public class Case<T> extends Tuple<Supplier<Boolean>, Supplier<Result<T>>>{
+import it.cbnoc.function.Supplier;
+import it.cbnoc.tuple.Tuple2;
+
+public class Case<T> extends Tuple2<Supplier<Boolean>, Supplier<Result<T>>> {
 
 	private Case(
 		Supplier<Boolean> booleanSupplier, Supplier<Result<T>> resultSupplier) {

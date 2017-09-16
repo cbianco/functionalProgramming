@@ -1,10 +1,10 @@
 package it.cbnoc.test;
 
-import it.cbnoc.manning.function.Function;
+import it.cbnoc.function.Function;
 
 import java.util.List;
 
-import static it.cbnoc.manning.collection.CollectionUtilities.*;
+import static it.cbnoc.utils.CollectionUtilities.*;
 
 public class TestCollection {
 
@@ -26,7 +26,7 @@ public class TestCollection {
 
 		System.out.println("prepend: " + prepend(5, list));
 
-		System.out.println("reverse2: " + reverse2(list));
+		System.out.println("reverse2: " + reverse(list));
 
 		System.out.println("map : " + mapLeft(list, a -> "ciao : " + a ));
 

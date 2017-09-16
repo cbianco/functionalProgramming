@@ -1,8 +1,10 @@
-package it.cbnoc.manning.function;
+package it.cbnoc.utils;
 
 import java.util.function.Supplier;
 
 public abstract class TailCall<T> {
+
+    private TailCall() {}
 
     public static class Return<T> extends TailCall<T> {
 

@@ -1,4 +1,4 @@
-package it.cbnoc.manning.function;
+package it.cbnoc.function;
 
 @FunctionalInterface
 public interface Supplier<T> {

@@ -1,9 +1,9 @@
 package it.cbnoc.test;
 
-import it.cbnoc.manning.function.Effect;
-import it.cbnoc.manning.function.Executable;
-import it.cbnoc.manning.function.Function;
-import static it.cbnoc.manning.collection.CollectionUtilities.*;
+import it.cbnoc.function.Effect;
+import it.cbnoc.function.Executable;
+import it.cbnoc.function.Function;
+import static it.cbnoc.utils.CollectionUtilities.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,12 +14,17 @@ public class TestExecutable {
 
 
 	public static void main(String[] args){
+
 		Function<Double, Double> addTax = x -> x * 1.09;
+
 		Function<Double, Double> addShipping = x -> x + 3.50;
+
 		List<Double> prices = list(10.10, 23.45, 32.07, 9.23);
+
 		List<Double> pricesIncludingTax = map(prices, addTax);
-		List<Double> pricesIncludingShipping =
-			map(pricesIncludingTax, addShipping);
+
+		List<Double> pricesIncludingShipping = map(pricesIncludingTax, addShipping);
+
 		Effect<Double> printWith2decimals = x -> {
 			System.out.printf("%.2f", x);
 			System.out.println();
@@ -32,7 +37,6 @@ public class TestExecutable {
 			};
 
 		Executable ez = () -> {};
-
 
 		Executable program = foldLeft(pricesIncludingShipping, ez,
 			e -> d -> compose.apply(e).apply(() -> printWith2decimals.apply(d)));

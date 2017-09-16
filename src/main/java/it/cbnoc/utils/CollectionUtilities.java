@@ -1,11 +1,13 @@
-package it.cbnoc.manning.collection;
+package it.cbnoc.utils;
 
-import it.cbnoc.manning.function.Function;
+import it.cbnoc.function.Function;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import static it.cbnoc.utils.TailCall.*;
+import it.cbnoc.utils.TailCall;
 
 public class CollectionUtilities {
 
@@ -60,38 +62,22 @@ public class CollectionUtilities {
 		return foldLeft(list, list(t), a -> b -> append(a, b));
 	}
 
+
 	public static <T, U> U foldLeft(
-		List<T> list, U acc, Function<U, Function<T, U>> function) {
-
-		U result = acc;
-
-		for(T t : list) {
-			result = function.apply(result).apply(t);
-		}
-
-		return result;
+			List<T> list, U acc, Function<U, Function<T, U>> f) {
+		return foldLeft_(list, acc, f).eval();
 
 	}
 
-	public static <T, U> U foldRight(
-		List<T> ts, U identity, Function<T, Function<U, U>> f) {
+	private static <T, U> TailCall<U> foldLeft_(
+			List<T> list, U acc, Function<U, Function<T, U>> f){
 
-		return ts.isEmpty()
-			? identity
-			: f.apply(head(ts)).apply(foldRight(tail(ts), identity, f));
+		return list.isEmpty()
+				? ret(acc)
+				: sus(() -> foldLeft_(tail(list), f.apply(acc).apply(head(list)), f));
 	}
 
 	public static <T> List<T> reverse(List<T> list) {
-		List<T> result = new ArrayList<>();
-
-		for(int i = list.size() - 1; i >= 0; i--) {
-			result.add(list.get(i));
-		}
-
-		return Collections.unmodifiableList(result);
-	}
-
-	public static <T> List<T> reverse2(List<T> list) {
 
 		return foldLeft(list, list(), a -> b -> prepend(b, a));
 	}
@@ -126,4 +112,46 @@ public class CollectionUtilities {
 
 		return result;
 	}
+
+	public static List<Integer> range(int start, int end) {
+		return range_(start, end, list()).eval();
+	}
+
+	private static TailCall<List<Integer>> range_(int start, int end, List<Integer> acc) {
+		return end <= start
+				? ret(acc)
+				: sus(() -> range_(start + 1, end, append(acc, start)));
+	}
+
+	public static <T, U> U foldRight(
+			List<T> ts, U identity, Function<T, Function<U, U>> f) {
+
+		return foldRight_(reverse(ts), identity,f).eval();
+	}
+
+	private static <T, U> TailCall<U> foldRight_(
+			List<T> ts, U identity, Function<T, Function<U, U>> f) {
+
+		return ts.isEmpty()
+				? ret(identity)
+				: sus(() -> foldRight_(tail(ts), f.apply(head(ts)).apply(identity), f));
+
+	}
+
+	public static <T> Function<T,T> composeAllViaFoldLeft(List<Function<T,T>> list) {
+		return x -> foldLeft(reverse(list), x, a -> b -> b.apply(a));
+	}
+
+	public static <T> Function<T,T> composeAllViaFoldRight(List<Function<T,T>> list) {
+		return x -> foldRight(list, x, a -> a::apply);
+	}
+
+	public static <T> Function<T, T> andThenAllViaFoldLeft(List<Function<T, T>> list) {
+		return x -> foldLeft(list, x, a -> b -> b.apply(a));
+	}
+
+	public static <T> Function<T, T> andThenAllViaFoldRight(List<Function<T, T>> list) {
+		return x -> foldRight(reverse(list), x, a -> a::apply);
+	}
+
 }

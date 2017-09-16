@@ -1,9 +1,12 @@
 package it.cbnoc.test;
 
-import it.cbnoc.manning.function.Function;
-import it.cbnoc.manning.function.TailCall;
+import it.cbnoc.function.Function;
+import it.cbnoc.utils.TailCall;
 
-import static it.cbnoc.manning.function.Case.mcase;
+import static it.cbnoc.utils.Case.mcase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MAAAIN {
 
@@ -63,6 +66,19 @@ public class MAAAIN {
 
     }
 
+    public static void main(String[] args) {
+
+        List<Function<Object, Object>> stringList = new ArrayList();
+
+        for (int i = 0; i < 100; i++) {
+            final int y = i;
+            stringList.add(Function.higherCompose().apply(Function.identity()).apply(Function.identity()));
+        }
+
+        System.out.println();
+
+    }
+
     static public int factorial(int n) {
         return n == 0 ? 1 : n * factorial(n - 1);
     }
@@ -72,14 +88,13 @@ public class MAAAIN {
         return String.format("%s, %s, %s, %s", a, b, c, d);
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
 
         //System.out.println(add(Integer.MAX_VALUE, 5).eval());
-
         System.out.println(addr(Integer.MAX_VALUE, 1));
 
-    }
+    }*/
 
     public static TailCall<Integer> add(int a, int b){
 

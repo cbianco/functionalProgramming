@@ -1,4 +1,6 @@
-package it.cbnoc.manning.function;
+package it.cbnoc.function;
+
+import it.cbnoc.tuple.Tuple2;
 
 public interface Function<T, U> {
 
@@ -52,8 +54,8 @@ public interface Function<T, U> {
         return f.apply(a).apply(b).apply(c);
     }
 
-    static <A, B, C> Function<A, Function<B, C>> curry(Function<Tuple<A, B>, C> f) {
-        return a -> b -> f.apply(new Tuple<>(a, b));
+    static <A, B, C> Function<A, Function<B, C>> curry(Function<Tuple2<A, B>, C> f) {
+        return a -> b -> f.apply(new Tuple2<>(a, b));
     }
 
     static <A, B, C> Function<B, Function<A, C>> reverseArgs(Function<A, Function<B, C>> f) {
