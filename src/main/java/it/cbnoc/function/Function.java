@@ -2,6 +2,7 @@ package it.cbnoc.function;
 
 import it.cbnoc.tuple.Tuple2;
 
+@FunctionalInterface
 public interface Function<T, U> {
 
     U apply(T arg);

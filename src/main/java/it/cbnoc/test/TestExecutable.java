@@ -10,9 +10,6 @@ import java.util.List;
 
 public class TestExecutable {
 
-
-
-
 	public static void main(String[] args){
 
 		Function<Double, Double> addTax = x -> x * 1.09;
