@@ -2,16 +2,14 @@ package it.cbnoc.test;
 
 import it.cbnoc.function.Effect;
 import it.cbnoc.function.Function;
-import it.cbnoc.utils.Result;
 
 import java.util.regex.Pattern;
 
 import static it.cbnoc.utils.Case.match;
 import static it.cbnoc.utils.Case.mcase;
-import static it.cbnoc.utils.Result.failure;
-import static it.cbnoc.utils.Result.success;
 
 public class TestCase {
+/*
 
 	static Pattern pattern = Pattern.compile("(ciao)");
 
@@ -36,5 +34,6 @@ public class TestCase {
 		emailChecker.apply("v").bind(success, failure);
 		emailChecker.apply("ciao").bind(success, failure);
 	}
+*/
 
 }

@@ -1,12 +1,13 @@
 package it.cbnoc.collection;
 
-import it.cbnoc.utils.Option;
+import it.cbnoc.utils.Result;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class Map<K, V> {
 
-    private final ConcurrentHashMap<K,V> _map = new ConcurrentHashMap<>();
+    private final ConcurrentMap<K,V> _map = new ConcurrentHashMap<>();
 
     public static <K,V> Map<K,V> empty(){
         return new Map<>();
@@ -17,10 +18,10 @@ public class Map<K, V> {
         return map;
     }
 
-    public Option<V> get(final K k) {
-        return this._map.contains(k)
-                ? Option.some(this._map.get(k))
-                : Option.none();
+    public Result<V> get(final K k) {
+        return this._map.containsKey(k)
+                ? Result.success(this._map.get(k))
+                : Result.empty();
     }
 
     public Map<K,V> put(K key, V value) {
@@ -32,6 +33,8 @@ public class Map<K, V> {
         return this;
     }
 
-
-
+    @Override
+    public String toString() {
+        return _map.toString();
+    }
 }
