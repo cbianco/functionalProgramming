@@ -1,8 +1,11 @@
 package it.cbnoc.collection;
 
+import it.cbnoc.function.Effect;
 import it.cbnoc.function.Function;
+import it.cbnoc.function.Supplier;
 import it.cbnoc.tuple.Tuple2;
 import it.cbnoc.utils.Result;
+import it.cbnoc.utils.Stream;
 import it.cbnoc.utils.TailCall;
 
 import java.util.Objects;
@@ -39,6 +42,8 @@ public abstract class List<A> {
     public abstract int lengthMemoized();
 
     public abstract Result<A> headOption();
+
+    public abstract void forEach(Effect<A> effect);
 
     public abstract <B> Tuple2<B, List<A>> foldLeft(
         B identity, B zero, Function<B, Function<A, B>> f);
@@ -111,12 +116,12 @@ public abstract class List<A> {
 
     }
 
-    public <B> Map<B, List<A>> groupBy(Function<A, B> f) {
-        return foldRight(Map.empty(), t -> mt -> {
+   /* public <B> MapWrap<B, List<A>> groupBy(Function<A, B> f) {
+        return foldRight(MapWrap.empty(), t -> mt -> {
             final B k = f.apply(t);
             return mt.put(k, mt.get(k).getOrElse(list()).cons(t));
         });
-    }
+    }*/
 
     public Result<A> getAt(int index) {
         return index < 0 || index >= length()
@@ -291,6 +296,11 @@ public abstract class List<A> {
         }
 
         @Override
+        public void forEach(Effect<A> effect) {
+
+        }
+
+        @Override
         public String toString() {
             return "[NIL]";
         }
@@ -384,6 +394,15 @@ public abstract class List<A> {
         @Override
         public Result<A> headOption() {
             return Result.success(_head);
+        }
+
+        @Override
+        public void forEach(Effect<A> effect) {
+            List<A> tmp = this;
+            while(!tmp.isEmpty()) {
+                effect.apply(tmp.head());
+                tmp = tmp.tail();
+            }
         }
 
         @Override
@@ -603,6 +622,14 @@ public abstract class List<A> {
         return List.unfold(start, i -> i < end
             ? Result.success(new Tuple2<>(i, i + 1))
             : Result.empty());
+    }
+
+    public static <A> List<A> fill(int n, Supplier<A> s) {
+        return range(0, n).map(ignore -> s.get());
+    }
+
+    public static <T> List<T> cons(T t, List<T> list) {
+        return list.cons(t);
     }
 
 }

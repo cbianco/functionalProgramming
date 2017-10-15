@@ -1,40 +1,77 @@
+/*
 package it.cbnoc.collection;
 
+import it.cbnoc.Tuple2.Tuple2;
+import it.cbnoc.Tuple2.Tuple2;
+import it.cbnoc.tuple.Tuple2;
 import it.cbnoc.utils.Result;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import static it.cbnoc.collection.MapEntry.mapEntry;
 
-public class Map<K, V> {
+public class Map<K extends Comparable<K>, V> {
 
-    private final ConcurrentMap<K,V> _map = new ConcurrentHashMap<>();
+	protected final Tree<MapEntry<Integer, List<Tuple2<K, V>>>> delegate;
 
-    public static <K,V> Map<K,V> empty(){
-        return new Map<>();
-    }
+	private Map() {
+		this.delegate = Tree.empty();
+	}
+	public Map(Tree<MapEntry<Integer, List<Tuple2<K, V>>>> delegate) {
+		this.delegate = delegate;
+	}
 
-    public static <K,V> Map<K,V> add(Map<K,V> map, K k, V v) {
-        map._map.put(k,v);
-        return map;
-    }
+	public Map<K, V> add(K key, V value) {
+		Tuple2<K, V> Tuple2 = new Tuple2<>(key, value);
+		List<Tuple2<K, V>> ltkv = getAll(key).map(lt ->
+			lt.foldLeft(List.list(Tuple2), l -> t -> t._1.equals(key)
+				? l
+				: l.cons(t))).getOrElse(() -> List.list(Tuple2));
+		return new Map<>(delegate.insert(mapEntry(key.hashCode(), ltkv)));
+	}
 
-    public Result<V> get(final K k) {
-        return this._map.containsKey(k)
-                ? Result.success(this._map.get(k))
-                : Result.empty();
-    }
+	public boolean contains(K key) {
+		return getAll(key).map(lt -> lt.exists(t ->
+			t._1.equals(key))).getOrElse(false);
+	}
 
-    public Map<K,V> put(K key, V value) {
-        return add(this, key, value);
-    }
+	public MapEntry<K, V> max() {
+		return delegate.max();
+	}
 
-    public Map<K,V> removeKey(K key) {
-        this._map.remove(key);
-        return this;
-    }
+	public MapEntry<K, V> min() {
+		return delegate.min();
+	}
 
-    @Override
-    public String toString() {
-        return _map.toString();
-    }
+	public Map<K, V> remove(K key) {
+		List<Tuple2<K, V>> ltkv = getAll(key).map(lt ->
+			lt.foldLeft(List.<Tuple2<K, V>>list(), l -> t -> t._1.equals(key)
+				? l
+				: l.cons(t))).getOrElse(List::list);
+		return ltkv.isEmpty()
+			? new Map<>(delegate.delete(MapEntry.mapEntry(key.hashCode())))
+			: new Map<>(delegate.insert(mapEntry(key.hashCode(), ltkv)));
+	}
+
+	public Result<Tuple2<K, V>> get(K key) {
+		return getAll(key).flatMap(lt -> lt.first(t -> t._1.equals(key)));
+	}
+
+	public boolean isEmpty() {
+		return delegate.isEmpty();
+	}
+
+	public static <K extends Comparable<K>, V> Map<K, V> empty() {
+		return new Map<>();
+	}
+
+	public List<V> values() {
+		return List.sequence(delegate.foldInReverseOrder(List.<Result<V>>list(),
+			lst1 -> me -> lst2 -> List.concat(lst2,
+				lst1.cons(me.value)))).getOrElse(List.list());
+	}
+
+	private Result<List<Tuple2<K, V>>> getAll(K key) {
+		return delegate.get(mapEntry(key.hashCode()))
+			.flatMap(x -> x.value.map(lt -> lt.map(t -> t)));
+	}
 }
+*/

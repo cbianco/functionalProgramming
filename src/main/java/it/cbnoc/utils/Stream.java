@@ -237,9 +237,19 @@ public abstract class Stream<A> {
 			x -> Result.success(
 				new Tuple2<>(x._1, new Tuple2<>(x._2, x._1 + x._2))));
 	}
-	public static <A, S> Stream<A> unfold(
-		S z, Function<S, Result<Tuple2<A, S>>> f) {
+	public static <A, S> Stream<A> unfold(S z, Function<S, Result<Tuple2<A, S>>> f) {
+
 		return f.apply(z).map(x -> cons(
 			() -> x._1, () -> unfold(x._2, f))).getOrElse(empty());
+	}
+
+	public static <T> Stream<T> fill(int n, Supplier<T> elem) {
+		return fill(empty(), n, elem).eval();
+	}
+
+	public static<T> TailCall<Stream<T>> fill(Stream<T> acc, int n, Supplier<T> elem) {
+		return n <= 0
+			? ret(acc)
+			: sus(() -> fill(new Cons<T>(elem, () -> acc), n - 1, elem));
 	}
 }

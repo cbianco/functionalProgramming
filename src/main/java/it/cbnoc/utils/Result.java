@@ -31,6 +31,8 @@ public abstract class Result<V> implements Serializable {
 
 	public abstract void forEachOrThrow(Effect<V> effect);
 
+	public abstract Result<String> forEachOrFail(Effect<V> effect);
+
 	public abstract boolean isEmpty();
 
 	public abstract Result<RuntimeException> forEachOrException(Effect<V> ef);
@@ -108,6 +110,11 @@ public abstract class Result<V> implements Serializable {
 		@Override
 		public void forEachOrThrow(Effect<V> effect) {
 			// Empty. Do nothing.
+		}
+
+		@Override
+		public Result<String> forEachOrFail(Effect<V> effect) {
+			return empty();
 		}
 
 		@Override
@@ -201,6 +208,11 @@ public abstract class Result<V> implements Serializable {
 		}
 
 		@Override
+		public Result<String> forEachOrFail(Effect<V> c) {
+			return success(_exception.getMessage());
+		}
+
+		@Override
 		public boolean isEmpty() {
 			return true;
 		}
@@ -281,6 +293,12 @@ public abstract class Result<V> implements Serializable {
 		@Override
 		public void forEachOrThrow(Effect<V> effect) {
 			effect.apply(_value);
+		}
+
+		@Override
+		public Result<String> forEachOrFail(Effect<V> e) {
+			e.apply(this._value);
+			return empty();
 		}
 
 		@Override
